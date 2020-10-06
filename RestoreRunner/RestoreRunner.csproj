@@ -6,9 +6,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Build" Version="16.7.0" ExcludeAssets="runtime"/>
-        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Build" Version="16.7.0" ExcludeAssets="runtime" />
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" ExcludeAssets="runtime" />
         <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\D\msbuild\src\Build\Microsoft.Build.csproj" />
+      <ProjectReference Include="..\..\..\D\msbuild\src\Framework\Microsoft.Build.Framework.csproj" />
+      <ProjectReference Include="..\..\..\D\msbuild\src\Tasks\Microsoft.Build.Tasks.csproj" />
+      <ProjectReference Include="..\..\..\D\msbuild\src\Utilities\Microsoft.Build.Utilities.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
     </ItemGroup>
 </Project>
