@@ -19,6 +19,13 @@
       <ProjectReference Include="..\..\..\D\msbuild\src\Utilities\Microsoft.Build.Utilities.csproj" />
       <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj" />
       <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Common\NuGet.Common.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Configuration\NuGet.Configuration.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Credentials\NuGet.Credentials.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.DependencyResolver.Core\NuGet.DependencyResolver.Core.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.LibraryModel\NuGet.LibraryModel.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.PackageManagement\NuGet.PackageManagement.csproj" />
+      <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.Packaging\NuGet.Packaging.csproj" />
       <ProjectReference Include="..\..\..\D\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
     </ItemGroup>
 </Project>

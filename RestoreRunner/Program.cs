@@ -10,10 +10,19 @@ namespace RestoreRunner
 {
     class Program
     {
-        private static string[] DllsToCopy = new string[] { "NuGet.Build.Tasks.dll",
+        private static string[] DllsToCopy = new string[] { 
+            "NuGet.Build.Tasks.dll",
+            "NuGet.Credentials.dll",
+            "NuGet.Configuration.dll",
             "NuGet.Common.dll",
             "NuGet.Commands.dll",
             "NuGet.ProjectModel.dll",
+            "NuGet.LibraryModel.dll",
+            "NuGet.Packaging.dll",
+            "NuGet.Versioning.dll",
+            "NuGet.Protocol.dll",
+            "NuGet.Frameworks.dll",
+            "NuGet.DependencyResolver.Core.dll",
             "Microsoft.Build.dll",
             "Microsoft.Build.Framework.dll",
             //"Microsoft.Build.NuGetSdkResolver.dll",
