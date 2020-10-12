@@ -10,32 +10,8 @@ namespace RestoreRunner
 {
     class Program
     {
-        private static string[] DllsToCopy = new string[] { 
-            "NuGet.Build.Tasks.dll",
-            "NuGet.Credentials.dll",
-            "NuGet.Configuration.dll",
-            "NuGet.Common.dll",
-            "NuGet.Commands.dll",
-            "NuGet.ProjectModel.dll",
-            "NuGet.LibraryModel.dll",
-            "NuGet.Packaging.dll",
-            "NuGet.Versioning.dll",
-            "NuGet.Protocol.dll",
-            "NuGet.Frameworks.dll",
-            "NuGet.DependencyResolver.Core.dll",
-            "Microsoft.Build.dll",
-            "Microsoft.Build.Framework.dll",
-            //"Microsoft.Build.NuGetSdkResolver.dll",
-            "Microsoft.Build.Tasks.Core.dll",
-            "Microsoft.Build.Utilities.Core.dll"};
-
         static void Main(string[] args)
         {
-            foreach (var instance in MSBuildLocator.QueryVisualStudioInstances())
-            {
-                Console.WriteLine($"MSBuildPath:{instance.MSBuildPath}, VisualStudioRootPath:{instance.VisualStudioRootPath}");
-            }
-
             RegisterSDK();
 
             new RestoreRunner().RunRestore(args[0]);
@@ -46,13 +22,21 @@ namespace RestoreRunner
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var sdkDst = Path.Combine(currentDir, @"sdk\");
             var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
+
+            Console.WriteLine($"Copying sdk from '{sdkDst}'.");
             DirectoryCopy(sdkSrc, sdkDst, true);
-            foreach (var dll in DllsToCopy)
+            var filesToCopy = new DirectoryInfo(currentDir).GetFiles()
+                .Select(x => x.Name)
+                .Where(x => x.StartsWith("NuGet.", StringComparison.OrdinalIgnoreCase) ||
+                            x.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine($"Copying NuGet.* and Microsoft.* files from '{currentDir}'.");
+            foreach (var fileToCopy in filesToCopy)
             {
-                File.Copy(Path.Combine(currentDir, dll), Path.Combine(sdkDst, dll), true);
+                File.Copy(Path.Combine(currentDir, fileToCopy), Path.Combine(sdkDst, fileToCopy), true);
             }
 
-            Console.WriteLine($"Registering:" + sdkDst);
+            Console.WriteLine($"Registering sdk from '{sdkDst}'.");
             MSBuildLocator.RegisterMSBuildPath(sdkDst);
 
             // Copied from MSBuildLocator.RegisterInstance
@@ -70,7 +54,7 @@ namespace RestoreRunner
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
-            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            var dir = new DirectoryInfo(sourceDirName);
 
             if (!dir.Exists)
             {
@@ -79,13 +63,13 @@ namespace RestoreRunner
                     + sourceDirName);
             }
 
-            DirectoryInfo[] dirs = dir.GetDirectories();
+            var dirs = dir.GetDirectories();
 
             // If the destination directory doesn't exist, create it.       
             Directory.CreateDirectory(destDirName);
 
             // Get the files in the directory and copy them to the new location.
-            FileInfo[] files = dir.GetFiles();
+            var files = dir.GetFiles();
             foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(destDirName, file.Name);
