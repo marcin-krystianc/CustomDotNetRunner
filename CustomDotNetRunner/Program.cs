@@ -38,7 +38,7 @@ namespace RestoreRunner
 
             RegisterSDK();
 
-            Run();
+            new RestoreRunner().RunRestore(args[0]);
         }
 
         static void RegisterSDK()
@@ -101,13 +101,6 @@ namespace RestoreRunner
                     DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
                 }
             }
-        }
-
-        static void Run()
-        {
-
-            var restoreRunner = new RestoreRunner();
-            restoreRunner.RunRestore();
         }
     }
 }

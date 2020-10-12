@@ -8,35 +8,34 @@ namespace RestoreRunner
 {
     public class RestoreRunner
     {
-        public void RunRestore()
+        public void RunRestore(string projectPath)
         {  
             var logger = new BasicLogger();
 
             try
             {
-                string projectFileName = @"C:\gr-oss\GRLargeApp\Solution.sln"; // <--- Change here can be another
                 var projectCollection = new ProjectCollection();
                 // logger.Verbosity = LoggerVerbosity.Diagnostic;
                 var buildParameters = new BuildParameters(projectCollection)
                 {
-                    Loggers = new List<Microsoft.Build.Framework.ILogger> {logger},
+                    Loggers = new List<ILogger> {logger},
                 };
 
                 var globalProperty = new Dictionary<String, String>
                 {
+                    {"RestoreDisableParallel", "true"},
                 };
 
                 BuildManager.DefaultBuildManager.ResetCaches();
 
-                var buildRequest =
-                    new BuildRequestData(projectFileName, globalProperty, null, new [] {"Restore"}, null);
+                var buildRequest = new BuildRequestData(projectPath, globalProperty, null, new[] {"Restore"}, null);
                 var buildResult = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequest);
                 if (buildResult.OverallResult == BuildResultCode.Failure)
                 {
                     throw new Exception("Build failed");
                 }
             }
-            finally
+            catch (Exception _)
             {
                 Console.WriteLine(logger.GetLogString());
             }
