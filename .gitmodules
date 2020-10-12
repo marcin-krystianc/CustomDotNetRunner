@@ -1,0 +1,6 @@
+[submodule "NuGet.Client"]
+	path = NuGet.Client
+	url = https://github.com/NuGet/NuGet.Client.git
+[submodule "msbuild"]
+	path = msbuild
+	url = https://github.com/dotnet/msbuild.git
