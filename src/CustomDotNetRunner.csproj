@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\lib\CallContextProfiling\CallContextProfiling.csproj" />
       <ProjectReference Include="..\msbuild\src\Build\Microsoft.Build.csproj" />
       <ProjectReference Include="..\msbuild\src\Framework\Microsoft.Build.Framework.csproj" />
       <ProjectReference Include="..\msbuild\src\Tasks\Microsoft.Build.Tasks.csproj" />

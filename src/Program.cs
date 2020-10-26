@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Build.Locator;
+using Newtonsoft.Json;
 using NuGet.Build.Tasks;
 
 namespace RestoreRunner
@@ -14,7 +15,19 @@ namespace RestoreRunner
         {
             RegisterSDK();
 
-            new RestoreRunner().RunRestore(args[0]);
+            try
+            {
+                new RestoreRunner().RunRestore(args[0]);
+            }
+            finally
+            {
+                foreach (var d in CallContextProfiling.CallContextProfiler.Data
+                    .OrderBy(x => x.Value.Elapsed)
+                    .ThenBy(x => x.Key ))
+                {
+                    Console.WriteLine($"{JsonConvert.SerializeObject(d)}");
+                }
+            }
         }
 
         static void RegisterSDK()
@@ -23,7 +36,7 @@ namespace RestoreRunner
             var sdkDst = Path.Combine(currentDir, @"sdk\");
             var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
 
-            Console.WriteLine($"Copying sdk from '{sdkDst}'.");
+            Console.WriteLine($"Copying sdk from '{sdkSrc}'.");
             DirectoryCopy(sdkSrc, sdkDst, true);
             var filesToCopy = new DirectoryInfo(currentDir).GetFiles()
                 .Select(x => x.Name)

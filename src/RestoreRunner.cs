@@ -24,7 +24,8 @@ namespace RestoreRunner
 
                 var globalProperties = new Dictionary<String, String>
                 {
-                    // {"RestoreDisableParallel", "true"},
+                    {"RestoreDisableParallel", "true"},
+                    {"RestoreForce", "true"},
                 };
                 
                 var target = "Restore";
