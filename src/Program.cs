@@ -13,11 +13,12 @@ namespace RestoreRunner
     {
         static void Main(string[] args)
         {
-            RegisterSDK();
+            var sdkPath = RegisterSDK();
 
             try
             {
-                new RestoreRunner().RunRestore(args[0]);
+                new DotNetRunner(sdkPath).RunDotNet(args);
+                // new RestoreRunner().RunRestore(args[0]);
             }
             finally
             {
@@ -30,7 +31,7 @@ namespace RestoreRunner
             }
         }
 
-        static void RegisterSDK()
+        static string RegisterSDK()
         {
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var sdkDst = Path.Combine(currentDir, @"sdk\");
@@ -62,6 +63,8 @@ namespace RestoreRunner
             {
                 Environment.SetEnvironmentVariable(keyValuePair.Key, keyValuePair.Value);
             }
+
+            return sdkDst;
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)

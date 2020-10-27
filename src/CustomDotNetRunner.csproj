@@ -18,6 +18,7 @@
       <ProjectReference Include="..\msbuild\src\Framework\Microsoft.Build.Framework.csproj" />
       <ProjectReference Include="..\msbuild\src\Tasks\Microsoft.Build.Tasks.csproj" />
       <ProjectReference Include="..\msbuild\src\Utilities\Microsoft.Build.Utilities.csproj" />
+      <ProjectReference Include="..\NuGet.Client\src\NuGet.Clients\NuGet.CommandLine\NuGet.CommandLine.csproj" />
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj" />
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj" />
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Common\NuGet.Common.csproj" />
@@ -28,5 +29,6 @@
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.PackageManagement\NuGet.PackageManagement.csproj" />
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Packaging\NuGet.Packaging.csproj" />
       <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
+      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Resolver\NuGet.Resolver.csproj" />
     </ItemGroup>
 </Project>
