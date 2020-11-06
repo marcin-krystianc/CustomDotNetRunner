@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,8 +18,8 @@ namespace RestoreRunner
 
             try
             {
-                new DotNetRunner(sdkPath).RunDotNet(args);
-                // new RestoreRunner().RunRestore(args[0]);
+                // new DotNetRunner(sdkPath).RunDotNet(args);
+                new RestoreRunner().RunRestore(args[0]);
             }
             finally
             {
@@ -33,8 +34,9 @@ namespace RestoreRunner
 
         static string RegisterSDK()
         {
+            var branch = RunCommand("./../../../../NuGet.Client","git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var sdkDst = Path.Combine(currentDir, @"sdk\");
+            var sdkDst = Path.Combine(currentDir, $"sdk-{branch}\\");
             var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
 
             Console.WriteLine($"Copying sdk from '{sdkSrc}'.");
@@ -101,6 +103,33 @@ namespace RestoreRunner
                     DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
                 }
             }
+        }
+        
+        static string RunCommand(string workingDirectory, string fileName, params string [] arguments)
+        {
+            var process = new Process();
+            process.StartInfo.FileName = fileName;
+            process.StartInfo.WorkingDirectory = Path.GetFullPath(workingDirectory);
+            
+            foreach (var argument in arguments)
+            {
+                process.StartInfo.ArgumentList.Add(argument);
+            }
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.Start();
+            
+            var output = process.StandardOutput.ReadToEnd();
+            var error = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+            if (process.ExitCode != 0)
+            {
+                throw new Exception("Process failed!:" + error);
+            }
+
+            return output;
         }
     }
 }
