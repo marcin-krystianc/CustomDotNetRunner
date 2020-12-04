@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CallContextProfiling;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json;
 using NuGet.Build.Tasks;
@@ -15,17 +16,19 @@ namespace RestoreRunner
         static void Main(string[] args)
         {
             var sdkPath = RegisterSDK();
-
             try
             {
-                // new DotNetRunner(sdkPath).RunDotNet(args);
-                new RestoreRunner().RunRestore(args[0]);
+                using (CallContextProfiler.NamedStep("Main"))
+                {
+                    // new DotNetRunner(sdkPath).RunDotNet(args);
+                    new RestoreRunner().RunRestore(args[0]);
+                }
             }
             finally
             {
                 foreach (var d in CallContextProfiling.CallContextProfiler.Data
                     .OrderBy(x => x.Value.Elapsed)
-                    .ThenBy(x => x.Key ))
+                    .ThenBy(x => x.Key))
                 {
                     Console.WriteLine($"{JsonConvert.SerializeObject(d)}");
                 }
@@ -34,7 +37,7 @@ namespace RestoreRunner
 
         static string RegisterSDK()
         {
-            var branch = RunCommand("./../../../../NuGet.Client","git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
+            var branch = RunCommand("./../../../../NuGet.Client", "git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var sdkDst = Path.Combine(currentDir, $"sdk-{branch}\\");
             var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
@@ -104,13 +107,13 @@ namespace RestoreRunner
                 }
             }
         }
-        
-        static string RunCommand(string workingDirectory, string fileName, params string [] arguments)
+
+        static string RunCommand(string workingDirectory, string fileName, params string[] arguments)
         {
             var process = new Process();
             process.StartInfo.FileName = fileName;
             process.StartInfo.WorkingDirectory = Path.GetFullPath(workingDirectory);
-            
+
             foreach (var argument in arguments)
             {
                 process.StartInfo.ArgumentList.Add(argument);
@@ -120,7 +123,7 @@ namespace RestoreRunner
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            
+
             var output = process.StandardOutput.ReadToEnd();
             var error = process.StandardError.ReadToEnd();
             process.WaitForExit();

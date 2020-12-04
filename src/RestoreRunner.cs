@@ -41,8 +41,9 @@ namespace RestoreRunner
                     throw new Exception("Build failed");
                 }
             }
-            catch (Exception _)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 Console.WriteLine(logger.GetLogString());
             }
         }
