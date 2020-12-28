@@ -26,6 +26,7 @@ namespace RestoreRunner
                 {
                     {"RestoreDisableParallel", "true"},
                     {"RestoreForce", "true"},
+                    //{"RestoreUseStaticGraphEvaluation", "true"},
                 };
                 
                 var target = "Restore";
