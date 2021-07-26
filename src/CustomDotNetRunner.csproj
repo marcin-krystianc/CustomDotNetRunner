@@ -2,33 +2,34 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Build" Version="16.7.0" ExcludeAssets="runtime" />
-        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" ExcludeAssets="runtime" />
-        <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
-        <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+        <PackageReference Include="Microsoft.Build" Version="16.7.0" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6"/>
+        <PackageReference Include="Newtonsoft.Json" Version="9.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\lib\CallContextProfiling\CallContextProfiling.csproj" />
-      <ProjectReference Include="..\msbuild\src\Build\Microsoft.Build.csproj" />
-      <ProjectReference Include="..\msbuild\src\Framework\Microsoft.Build.Framework.csproj" />
-      <ProjectReference Include="..\msbuild\src\Tasks\Microsoft.Build.Tasks.csproj" />
-      <ProjectReference Include="..\msbuild\src\Utilities\Microsoft.Build.Utilities.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Clients\NuGet.CommandLine\NuGet.CommandLine.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Common\NuGet.Common.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Configuration\NuGet.Configuration.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Credentials\NuGet.Credentials.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.DependencyResolver.Core\NuGet.DependencyResolver.Core.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.LibraryModel\NuGet.LibraryModel.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.PackageManagement\NuGet.PackageManagement.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Packaging\NuGet.Packaging.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
-      <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Resolver\NuGet.Resolver.csproj" />
+        <ProjectReference Include="..\lib\CallContextProfiling\CallContextProfiling.csproj"/>
+        <ProjectReference Include="..\msbuild\src\Build\Microsoft.Build.csproj"/>
+        <ProjectReference Include="..\msbuild\src\Framework\Microsoft.Build.Framework.csproj"/>
+        <ProjectReference Include="..\msbuild\src\Tasks\Microsoft.Build.Tasks.csproj"/>
+        <ProjectReference Include="..\msbuild\src\Utilities\Microsoft.Build.Utilities.csproj" />
+        <ProjectReference Include="..\msbuild\src\StringTools\StringTools.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Clients\NuGet.CommandLine\NuGet.CommandLine.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Common\NuGet.Common.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Configuration\NuGet.Configuration.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Credentials\NuGet.Credentials.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.DependencyResolver.Core\NuGet.DependencyResolver.Core.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.LibraryModel\NuGet.LibraryModel.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.PackageManagement\NuGet.PackageManagement.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Packaging\NuGet.Packaging.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj"/>
+        <ProjectReference Include="..\NuGet.Client\src\NuGet.Core\NuGet.Resolver\NuGet.Resolver.csproj"/>
     </ItemGroup>
 </Project>

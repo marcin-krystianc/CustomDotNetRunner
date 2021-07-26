@@ -20,7 +20,7 @@ namespace RestoreRunner
             {
                 using (CallContextProfiler.NamedStep("Main"))
                 {
-                    // new DotNetRunner(sdkPath).RunDotNet(args);
+                    //new DotNetRunner(sdkPath).RunDotNet(args);
                     new RestoreRunner().RunRestore(args[0]);
                 }
             }
@@ -39,7 +39,7 @@ namespace RestoreRunner
         {
             var branch = RunCommand("./../../../../NuGet.Client", "git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var sdkDst = Path.Combine(currentDir, $"sdk-{branch}\\");
+            var sdkDst = Path.Combine(currentDir, $"6.0.100-sdk-{branch}\\");
             var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
 
             Console.WriteLine($"Copying sdk from '{sdkSrc}'.");
