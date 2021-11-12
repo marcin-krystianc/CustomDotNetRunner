@@ -16,8 +16,6 @@ namespace RestoreRunner
         public void RunDotNet(string[] args)
         {
             var assemblyPath = Path.Combine(_sdk, "dotnet.dll");
-            AssemblyLoadContext.Default.Resolving += (context, name) =>
-                AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(_sdk, name.Name + ".dll"));
             AppDomain.CurrentDomain.SetData("APP_CONTEXT_BASE_DIRECTORY", _sdk);
             var myAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
             var programType = myAssembly.GetType("Microsoft.DotNet.Cli.Program");

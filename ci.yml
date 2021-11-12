@@ -4,12 +4,16 @@ on:
   push:
   pull_request:
 
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
 jobs:
 
   # Enforces the consistency of code formatting using `.editorconfig` and the `dotnet-format` tool.
   check-format:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id
-    runs-on: ubuntu-18.04
+    runs-on: windows-2019
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,22 +24,19 @@ jobs:
       - name: Restore tools
         run: dotnet tool restore
       - name: Check format
-        run: dotnet format --check
+        run: dotnet format --check --exclude submodules
 
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id
     strategy:
       matrix:
-        os: [windows-2019]
+        os: [ubuntu-18.04, windows-2019]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup .NET Core SDK
-        if: runner.os != 'Windows'
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.101
+      - name: Configure
+        run: .\configure.ps1
       - name: Build
         run: .\build.ps1 -Configuration Release

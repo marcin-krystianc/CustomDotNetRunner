@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using CallContextProfiling;
 using Microsoft.Build.Locator;
 using Newtonsoft.Json;
-using NuGet.Build.Tasks;
 
 namespace RestoreRunner
 {
@@ -18,8 +18,27 @@ namespace RestoreRunner
             var sdkPath = RegisterSDK();
             try
             {
+                //var sdkPath = @"c:\Program Files\dotnet\sdk\3.1.411\";
+                //var sdkPath = @"c:\Program Files\dotnet\sdk\5.0.302\";
+                //var sdkPath = @"d:\dotnet\sdk\6.0.100-transitivedependencypinning\";
+                //var sdkPath = @"d:\dotnet\sdk\6.0.100-dev.1\";
+                // Copied from MSBuildLocator.RegisterInstance
+                foreach (var keyValuePair in new Dictionary<string, string>()
+                {
+                    ["MSBUILD_EXE_PATH"] = sdkPath + "MSBuild.dll",
+                    ["MSBuildExtensionsPath"] = sdkPath,
+                    ["MSBuildSDKsPath"] = sdkPath + "Sdks",
+                    ["NUGET_PACKAGES"] = @"d:\global-packages",
+                })
+                {
+                    Environment.SetEnvironmentVariable(keyValuePair.Key, keyValuePair.Value);
+                }
+
                 using (CallContextProfiler.NamedStep("Main"))
                 {
+                    AssemblyLoadContext.Default.Resolving += (context, name) =>
+                        AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(sdkPath, name.Name + ".dll"));
+                    
                     //new DotNetRunner(sdkPath).RunDotNet(args);
                     new RestoreRunner().RunRestore(args[0]);
                 }
@@ -39,23 +58,22 @@ namespace RestoreRunner
         {
             var branch = RunCommand("./../../../../NuGet.Client", "git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
             var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var sdkDst = Path.Combine(currentDir, $"6.0.100-sdk-{branch}\\");
-            var sdkSrc = MSBuildLocator.QueryVisualStudioInstances().First().MSBuildPath;
+            var sdkDst = @"d:\dotnet\sdk\5.0.403-transitivedependencypinning\";
 
-            Console.WriteLine($"Copying sdk from '{sdkSrc}'.");
-            DirectoryCopy(sdkSrc, sdkDst, true);
-            var filesToCopy = new DirectoryInfo(currentDir).GetFiles()
+            var searchPattern = new[] { "NuGet*.dll", "NuGet*.pdb", "NuGet*.xml", "Newtonsoft.Json" };
+
+            Console.WriteLine($"Sdk: '{sdkDst}'.");
+            var filesToCopy = searchPattern.SelectMany(x => new DirectoryInfo(currentDir).GetFiles(x))
                 .Select(x => x.Name)
-                .Where(x => x.StartsWith("NuGet.", StringComparison.OrdinalIgnoreCase) ||
-                            x.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase));
+                .OrderBy(x => x);
 
-            Console.WriteLine($"Copying NuGet.* and Microsoft.* files from '{currentDir}'.");
             foreach (var fileToCopy in filesToCopy)
             {
+                Console.WriteLine($"Copying '{fileToCopy}' to '{sdkDst}'.");
                 File.Copy(Path.Combine(currentDir, fileToCopy), Path.Combine(sdkDst, fileToCopy), true);
             }
 
-            Console.WriteLine($"Registering sdk from '{sdkDst}'.");
+            Console.WriteLine($"Registering sdk: '{sdkDst}'.");
             MSBuildLocator.RegisterMSBuildPath(sdkDst);
 
             // Copied from MSBuildLocator.RegisterInstance

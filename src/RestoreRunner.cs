@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
-using NuGet.Protocol;
+using Newtonsoft.Json;
 
 namespace RestoreRunner
 {
@@ -26,12 +26,13 @@ namespace RestoreRunner
                 {
                     {"RestoreDisableParallel", "true"},
                     {"RestoreForce", "true"},
-                    //{"RestoreUseStaticGraphEvaluation", "true"},
+                    {"RestoreUseStaticGraphEvaluation", "true"},
+                    {"EnableTransitiveDependencyPinning", "false"},
                 };
                 
                 var target = "Restore";
                 Console.WriteLine(
-                    $"Running target:'{target}', projectPath:'{projectPath}', globalProperties:'{globalProperties.ToJson()}'");
+                    $"Running target:'{target}', projectPath:'{projectPath}', globalProperties:'{JsonConvert.SerializeObject(globalProperties)}'");
                 
                 BuildManager.DefaultBuildManager.ResetCaches();
 
