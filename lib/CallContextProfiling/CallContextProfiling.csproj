@@ -1,7 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project>
+    <Import Project="..\..\NuGet.Client\build\common.props" />
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+    
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>net472;net5.0</TargetFrameworks>
     </PropertyGroup>
 
+    <Import Project="..\..\NuGet.Client\build\common.targets" />
+    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 </Project>

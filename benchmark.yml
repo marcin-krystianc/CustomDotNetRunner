@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  build:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id
+    strategy:
+      matrix:
+        os: [windows-2019]
+      fail-fast: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: git clone dev
+        run: git clone --recursive https://github.com/marcin-krystianc/NuGet.Client.git dev && ^
+             git -C dev checkout 8387514417648d4ed1c5e57a6bd32fef506f0b71
+      - name: git clone nommap
+        run: git clone -b dev-marcink-20210802-memorymaps --recursive https://github.com/marcin-krystianc/NuGet.Client.git nommap
+
+

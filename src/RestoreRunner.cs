@@ -24,9 +24,9 @@ namespace RestoreRunner
 
                 var globalProperties = new Dictionary<String, String>
                 {
-                    {"RestoreDisableParallel", "true"},
+                    //{"RestoreDisableParallel", "true"},
                     {"RestoreForce", "true"},
-                    {"RestoreUseStaticGraphEvaluation", "true"},
+                    //{"RestoreUseStaticGraphEvaluation", "true"}, // new process
                     {"EnableTransitiveDependencyPinning", "false"},
                 };
                 

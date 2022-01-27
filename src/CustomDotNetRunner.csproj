@@ -13,13 +13,15 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!--
         <ProjectReference Include="..\..\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks.Console\NuGet.Build.Tasks.Console.csproj" />
         <ProjectReference Include="..\..\NuGet.Client\src\NuGet.Core\NuGet.Build.Tasks\NuGet.Build.Tasks.csproj" />
-        <ProjectReference Include="..\..\NuGet.Client\src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj" />
-        <ProjectReference Include="..\lib\CallContextProfiling\CallContextProfiling.csproj" />
-        
+        <ProjectReference Include="..\..\NuGet.Client\src\NuGet.C   ore\NuGet.Commands\NuGet.Commands.csproj" />
         <ProjectReference Include="..\..\NuGet.Client\src\NuGet.Core\NuGet.DependencyResolver.Core\NuGet.DependencyResolver.Core.csproj" />
         <ProjectReference Include="..\..\NuGet.Client\src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj" />
+        -->
+        
+        <ProjectReference Include="..\lib\CallContextProfiling\CallContextProfiling.csproj" />
 
     </ItemGroup>
 </Project>

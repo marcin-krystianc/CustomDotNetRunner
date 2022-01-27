@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<UsePublicApiAnalyzer>false</UsePublicApiAnalyzer>
+		<SkipILMergeOfNuGetExe>true</SkipILMergeOfNuGetExe>
+	</PropertyGroup>
+</Project>

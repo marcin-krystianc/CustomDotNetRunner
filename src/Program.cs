@@ -29,6 +29,8 @@ namespace RestoreRunner
                     ["MSBuildExtensionsPath"] = sdkPath,
                     ["MSBuildSDKsPath"] = sdkPath + "Sdks",
                     ["NUGET_PACKAGES"] = @"d:\global-packages",
+                    ["MSBUILDDISABLENODEREUSE"] = "1",
+                    ["DOTNET_MULTILEVEL_LOOKUP"] = "0",
                 })
                 {
                     Environment.SetEnvironmentVariable(keyValuePair.Key, keyValuePair.Value);
@@ -57,20 +59,28 @@ namespace RestoreRunner
         static string RegisterSDK()
         {
             var branch = RunCommand("./../../../../NuGet.Client", "git", "rev-parse", "--abbrev-ref", "HEAD").Trim();
-            var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var sdkDst = @"d:\dotnet\sdk\5.0.403-transitivedependencypinning\";
+            //var srcDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //var srcDir = @"d:\workspace\CustomDotNetRunner\NuGet.Client\artifacts\NuGet.Build.Tasks.Console\bin\Debug\netcoreapp5.0\";
+            var srcDir = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+                , "..", "..", "..", "..", @"NuGet.Client\artifacts\NuGet.Build.Tasks.Console\bin"
+                , "Release"
+                //, "Debug"
+                , "netcoreapp5.0"));
 
-            var searchPattern = new[] { "NuGet*.dll", "NuGet*.pdb", "NuGet*.xml", "Newtonsoft.Json" };
+            var sdkDst = @"d:\dotnet\sdk\6.0.100-dev2\";
 
+            var searchPattern = new[] { "NuGet*.dll", "NuGet*.pdb", "NuGet*.xml", "NuGet*.props", "NuGet*.targets", "Newtonsoft.Json" };
+
+            Console.WriteLine($"srcDir: '{srcDir}'.");
             Console.WriteLine($"Sdk: '{sdkDst}'.");
-            var filesToCopy = searchPattern.SelectMany(x => new DirectoryInfo(currentDir).GetFiles(x))
+            var filesToCopy = searchPattern.SelectMany(x => new DirectoryInfo(srcDir).GetFiles(x))
                 .Select(x => x.Name)
                 .OrderBy(x => x);
 
             foreach (var fileToCopy in filesToCopy)
             {
                 Console.WriteLine($"Copying '{fileToCopy}' to '{sdkDst}'.");
-                File.Copy(Path.Combine(currentDir, fileToCopy), Path.Combine(sdkDst, fileToCopy), true);
+                File.Copy(Path.Combine(srcDir, fileToCopy), Path.Combine(sdkDst, fileToCopy), true);
             }
 
             Console.WriteLine($"Registering sdk: '{sdkDst}'.");
@@ -88,42 +98,6 @@ namespace RestoreRunner
             }
 
             return sdkDst;
-        }
-
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {
-            // Get the subdirectories for the specified directory.
-            var dir = new DirectoryInfo(sourceDirName);
-
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + sourceDirName);
-            }
-
-            var dirs = dir.GetDirectories();
-
-            // If the destination directory doesn't exist, create it.       
-            Directory.CreateDirectory(destDirName);
-
-            // Get the files in the directory and copy them to the new location.
-            var files = dir.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string tempPath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(tempPath, true);
-            }
-
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (DirectoryInfo subdir in dirs)
-                {
-                    string tempPath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
-                }
-            }
         }
 
         static string RunCommand(string workingDirectory, string fileName, params string[] arguments)
